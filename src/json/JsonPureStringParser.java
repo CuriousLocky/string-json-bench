@@ -53,7 +53,35 @@ public final class JsonPureStringParser {
   }
 
   private JsonValue readValue() {
-    switch(current) {
+    if (current.equals("n")) {
+      return readNull();
+    } else if (current.equals("t")) {
+      return readTrue();
+    } else if (current.equals("f")) {
+      return readFalse();
+    } else if (current.equals("\"")) {
+      return readString();
+    } else if (current.equals("[")) {
+      return readArray();
+    } else if (current.equals("{")) {
+      return readObject();
+    } else if (current.equals("-") ||
+              current.equals("0") || 
+              current.equals("1") ||
+              current.equals("2") ||
+              current.equals("3") ||
+              current.equals("4") ||
+              current.equals("5") ||
+              current.equals("6") ||
+              current.equals("7") ||
+              current.equals("8") ||
+              current.equals("9")) {
+      return readNumber();
+    } else {
+      throw expected("value"); 
+    }
+
+    /*switch(current) {
     case "n":
       return readNull();
     case "t":
@@ -80,7 +108,7 @@ public final class JsonPureStringParser {
       return readNumber();
     default:
       throw expected("value");
-    }
+    }*/
   }
 
   private JsonArray readArray() {
@@ -187,6 +215,24 @@ public final class JsonPureStringParser {
 
   private void readEscape() {
     read();
+    if (current.equals("\"") || current.equals("/") || current.equals("\\")) {
+      captureBuffer += current;
+    } else if (current.equals("b")) {
+      captureBuffer += "\b";
+    } else if (current.equals("f")) {
+      captureBuffer += "\f";
+    } else if (current.equals("n")) {
+      captureBuffer += "\n";
+    } else if (current.equals("r")) {
+      captureBuffer += "\r";
+    } else if (current.equals("t")) {
+      captureBuffer += "\t";
+    } else {
+      throw expected("valid escape sequence");
+    }
+    read();
+
+    /*read();
     switch(current) {
     case "\"":
     case "/":
@@ -211,7 +257,7 @@ public final class JsonPureStringParser {
     default:
       throw expected("valid escape sequence");
     }
-    read();
+    read();*/
   }
 
   private JsonValue readNumber() {
