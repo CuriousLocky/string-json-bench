@@ -231,33 +231,6 @@ public final class JsonPureStringParser {
       throw expected("valid escape sequence");
     }
     read();
-
-    /*read();
-    switch(current) {
-    case "\"":
-    case "/":
-    case "\\":
-      captureBuffer += current;
-      break;
-    case "b":
-      captureBuffer += "\b";
-      break;
-    case "f":
-      captureBuffer += "\f";
-      break;
-    case "n":
-      captureBuffer += "\n";
-      break;
-    case "r":
-      captureBuffer += "\r";
-      break;
-    case "t":
-      captureBuffer += "\t";
-      break;
-    default:
-      throw expected("valid escape sequence");
-    }
-    read();*/
   }
 
   private JsonValue readNumber() {
