@@ -337,7 +337,7 @@ public final class JsonPureStringParser {
     }
     index++;
     if (index < input.length()) {
-      current = input.substring(index, index + 1);
+      current = input.substring1(index, index + 1);
     } else {
       current = null;
     }

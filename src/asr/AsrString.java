@@ -18,11 +18,19 @@ public abstract class AsrString {
 
 	public abstract AsrString substring(int from, int to);
 
+	public abstract AsrString substring1(int from, int to);
+
 	public String toJavaString() {
 		throw new UnsupportedOperationException("please dont");
 	}
 
 	private static class AsrString1 extends AsrString {
+		private static final AsrString1[] CACHE = new AsrString1[256];
+		static {
+			for (int i = 0; i < 256; i++) {
+				CACHE[i] = new AsrString1((byte) i);
+			}
+		}
 
 		private final byte val;
 
@@ -39,6 +47,17 @@ public abstract class AsrString {
 		public boolean equals(AsrString what) {
 			if (what instanceof AsrString1) {
 				return this.val == ((AsrString1) what).val;
+				// } else if (what instanceof AsrStringWrapper wrapper) {
+				// if (wrapper.length() != 1) {
+				// return false;
+				// }
+				// return this.val == wrapper.target.charAt(0);
+				// } else if (what instanceof AsrStringView view) {
+				// if (view.length() != 1) {
+				// return false;
+				// }
+				// return this.val == view.target.charAt(view.from);
+				// }
 			} else if (what == null || what.length() != 1) {
 				return false;
 			} else {
@@ -53,6 +72,7 @@ public abstract class AsrString {
 				}
 			}
 			throw new UnsupportedOperationException("Not equal: " + what.getClass());
+			// return false;
 		}
 
 		@Override
@@ -69,6 +89,13 @@ public abstract class AsrString {
 			if (from - to == 0 && from == 0) {
 				return new AsrStringWrapper("");
 			} else if (from - to == 1 && from == 0) {
+				return this;
+			}
+			throw new StringIndexOutOfBoundsException("??");
+		}
+
+		public AsrString substring1(int from, int to) {
+			if (from - to == 0 && from == 0) {
 				return this;
 			}
 			throw new StringIndexOutOfBoundsException("??");
@@ -120,9 +147,14 @@ public abstract class AsrString {
 		}
 
 		public AsrString substring(int from, int to) {
-			// System.out.print("2");
+			System.out.print("2");
 			// not reached in benchmark
 			return new AsrStringWrapper(materialize().substring(from, to));
+		}
+
+		public AsrString substring1(int from, int to) {
+			// not reached in benchmark
+			return AsrString1.CACHE[this.target.charAt(from + this.from)];
 		}
 
 		private String materialize() {
@@ -132,7 +164,6 @@ public abstract class AsrString {
 	}
 
 	private static class AsrStringWrapper extends AsrString {
-
 		private String target;
 
 		AsrStringWrapper(String wrapped) {
@@ -179,11 +210,16 @@ public abstract class AsrString {
 				char content = this.target.charAt(from);
 				byte contentByte = (byte) content;
 				if (contentByte == content) {
-					return new AsrString1(contentByte);
+					return AsrString1.CACHE[contentByte];
 				}
 			}
+			// System.out.println(this.target.substring(from, to));
 			return new AsrStringView(this.target, from, to);
 			// return new AsrStringWrapper(this.target.substring(from, to));
+		}
+
+		public AsrString substring1(int from, int to) {
+			return AsrString1.CACHE[this.target.charAt(from)];
 		}
 
 	}
