@@ -21,27 +21,27 @@
  ******************************************************************************/
 package json;
 
-
+import asr.AsrString;
 /**
  * Represents a JSON object, a set of name/value pairs, where the names are strings and the values
  * are JSON values.
  * <p>
- * Members can be added using the <code>add(String, ...)</code> methods which accept instances of
+ * Members can be added using the <code>add(AsrString, ...)</code> methods which accept instances of
  * {@link JsonValue}, strings, primitive numbers, and boolean values. To modify certain values of an
- * object, use the <code>set(String, ...)</code> methods. Please note that the <code>add</code>
+ * object, use the <code>set(AsrString, ...)</code> methods. Please note that the <code>add</code>
  * methods are faster than <code>set</code> as they do not search for existing members. On the other
  * hand, the <code>add</code> methods do not prevent adding multiple members with the same name.
  * Duplicate names are discouraged but not prohibited by JSON.
  * </p>
  * <p>
- * Members can be accessed by their name using {@link #get(String)}.
+ * Members can be accessed by their name using {@link #get(AsrString)}.
  * <p>
  * This class is <strong>not supposed to be extended</strong> by clients.
  * </p>
  */
 public final class JsonObject extends JsonValue {
 
-  private final Vector<String> names;
+  private final Vector<AsrString> names;
   private final Vector<JsonValue> values;
   private transient HashIndexTable table;
 
@@ -49,7 +49,7 @@ public final class JsonObject extends JsonValue {
    * Creates a new empty JsonObject.
    */
   public JsonObject() {
-    names  = new Vector<String>();
+    names  = new Vector<AsrString>();
     values = new Vector<JsonValue>();
     table  = new HashIndexTable();
   }
@@ -72,7 +72,7 @@ public final class JsonObject extends JsonValue {
    *          the value of the member to add, must not be <code>null</code>
    * @return the object itself, to enable method chaining
    */
-  public JsonObject add(final String name, final JsonValue value) {
+  public JsonObject add(final AsrString name, final JsonValue value) {
     if (name == null) {
       throw new NullPointerException("name is null");
     }
@@ -94,7 +94,7 @@ public final class JsonObject extends JsonValue {
    * @return the value of the last member with the specified name, or <code>null</code> if this
    *         object does not contain a member with that name
    */
-  public JsonValue get(final String name) {
+  public JsonValue get(final AsrString name) {
     if (name == null) {
       throw new NullPointerException("name is null");
     }
@@ -130,7 +130,7 @@ public final class JsonObject extends JsonValue {
     return this;
   }
 
-  private int indexOf(final String name) {
+  private int indexOf(final AsrString name) {
     int index = table.get(name);
     if (index != -1 && name.equals(names.at(index))) {
       return index;
@@ -146,7 +146,7 @@ public final class JsonObject extends JsonValue {
       hashTable = new int[32]; // must be a power of two
     }
 
-    void add(final String name, final int index) {
+    void add(final AsrString name, final int index) {
       int slot = hashSlotFor(name);
       if (index < 0xff) {
         // increment by 1, 0 stands for empty
@@ -156,19 +156,19 @@ public final class JsonObject extends JsonValue {
       }
     }
 
-    int get(final String name) {
+    int get(final AsrString name) {
       int slot = hashSlotFor(name);
       // subtract 1, 0 stands for empty
       return (hashTable[slot] & 0xff) - 1;
     }
 
-    private int stringHash(final String s) {
+    private int stringHash(final AsrString s) {
       // this is not a proper hash, but sufficient for the benchmark,
       // and very portable!
       return s.length() * 1402589;
     }
 
-    private int hashSlotFor(final String element) {
+    private int hashSlotFor(final AsrString element) {
       return stringHash(element) & hashTable.length - 1;
     }
   }

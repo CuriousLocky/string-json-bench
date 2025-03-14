@@ -37,16 +37,16 @@ package json;
  * <p>
  * Instances that represent JSON <strong>numbers</strong>, <strong>strings</strong> and
  * <strong>boolean</strong> values can be created using the static factory methods
- * {@link #valueOf(String)}, {@link #valueOf(long)}, {@link #valueOf(double)}, etc.
+ * {@link #valueOf(AsrString)}, {@link #valueOf(long)}, {@link #valueOf(double)}, etc.
  * </p>
  * <p>
  * In order to find out whether an instance of this class is of a certain type, the methods
- * {@link #isObject()}, {@link #isArray()}, {@link #isString()}, {@link #isNumber()} etc. can be
+ * {@link #isObject()}, {@link #isArray()}, {@link #isAsrString()}, {@link #isNumber()} etc. can be
  * used.
  * </p>
  * <p>
  * If the type of a JSON value is known, the methods {@link #asObject()}, {@link #asArray()},
- * {@link #asString()}, {@link #asInt()}, etc. can be used to get this value directly in the
+ * {@link #asAsrString()}, {@link #asInt()}, etc. can be used to get this value directly in the
  * appropriate target type.
  * </p>
  * <p>

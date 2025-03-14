@@ -21,12 +21,13 @@
  ******************************************************************************/
 package json;
 
+import asr.AsrString;
 
 final class JsonString extends JsonValue {
 
-  private final String string;
+  private final AsrString string;
 
-  JsonString(final String string) {
+  JsonString(final AsrString string) {
     this.string = string;
   }
 

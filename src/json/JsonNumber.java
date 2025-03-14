@@ -21,12 +21,13 @@
  ******************************************************************************/
 package json;
 
+import asr.AsrString;
 
 final class JsonNumber extends JsonValue {
 
-  private final String string;
+  private final AsrString string;
 
-  JsonNumber(final String string) {
+  JsonNumber(final AsrString string) {
     this.string = string;
     if (string == null) {
       throw new NullPointerException("string is null");
@@ -35,7 +36,7 @@ final class JsonNumber extends JsonValue {
 
   @Override
   public String toString() {
-    return string;
+    return string.toJavaString();
   }
 
   @Override

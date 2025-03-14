@@ -21,27 +21,33 @@
  ******************************************************************************/
 package json;
 
+import asr.AsrString;
+
 final class JsonLiteral extends JsonValue {
 
-  static final JsonValue NULL = new JsonLiteral("null");
-  static final JsonValue TRUE = new JsonLiteral("true");
-  static final JsonValue FALSE = new JsonLiteral("false");
+  private static final AsrString L_NULL = AsrString.fromLiteral("null");
+  private static final AsrString L_TRUE = AsrString.fromLiteral("true");
+  private static final AsrString L_FALSE = AsrString.fromLiteral("false");
 
-  private final String value;
+  static final JsonValue NULL = new JsonLiteral(L_NULL);
+  static final JsonValue TRUE = new JsonLiteral(L_TRUE);
+  static final JsonValue FALSE = new JsonLiteral(L_FALSE);
+
+  private final AsrString value;
   private final boolean isNull;
   private final boolean isTrue;
   private final boolean isFalse;
 
-  private JsonLiteral(final String value) {
+  private JsonLiteral(final AsrString value) {
     this.value = value;
-    isNull  = "null".equals(value);
-    isTrue  = "true".equals(value);
-    isFalse = "false".equals(value);
+    isNull  = L_NULL.equals(value);
+    isTrue  = L_TRUE.equals(value);
+    isFalse = L_FALSE.equals(value);
   }
 
   @Override
   public String toString() {
-    return value;
+    return value.toJavaString();
   }
 
   @Override
